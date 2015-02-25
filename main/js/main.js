@@ -41,6 +41,10 @@ define(['Tile'], function(Tile){
 
         var randomOrder = shuffleArray(gameSpaces)
 
+        // AI for finding the best next move
+        // Pixi javascript library for graphics
+        // 
+
     }
 
     var shuffleArray = function(a) { // Fisher-Yates shuffle, no side effects

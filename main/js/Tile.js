@@ -1,8 +1,9 @@
 define(function(){
-    var Tile = function(id, path, orientation){
+    var Tile = function(id, path, orientation, treasure){
         this.id          = id
         this.path        = path
         this.orientation = orientation
+        this.treasure    = treasure
     }
 
     // orientation
