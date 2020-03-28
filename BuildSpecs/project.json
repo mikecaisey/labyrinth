@@ -1,0 +1,62 @@
+{
+    "projectsNotFound": [], 
+    "projects": [
+        {
+            "logsConfig": {
+                "s3Logs": {
+                    "status": "DISABLED"
+                }, 
+                "cloudWatchLogs": {
+                    "status": "ENABLED"
+                }
+            }, 
+            "timeoutInMinutes": 60, 
+            "name": "LabyrinthTestAndBuild", 
+            "serviceRole": "arn:aws:iam::112251263943:role/service-role/codebuild-Labyrinth-service-role", 
+            "tags": [
+                {
+                    "value": "CodeBuild", 
+                    "key": "Labyrinth"
+                }
+            ], 
+            "artifacts": {
+                "packaging": "NONE", 
+                "name": "LabyrinthTestAndBuild", 
+                "namespaceType": "BUILD_ID", 
+                "encryptionDisabled": true, 
+                "location": "labyrinth-react-build-artifacts", 
+                "overrideArtifactName": false, 
+                "path": "", 
+                "type": "S3"
+            }, 
+            "lastModified": 1585438448.573, 
+            "cache": {
+                "type": "NO_CACHE"
+            }, 
+            "created": 1585369232.77, 
+            "environment": {
+                "computeType": "BUILD_GENERAL1_SMALL", 
+                "imagePullCredentialsType": "SERVICE_ROLE", 
+                "privilegedMode": true, 
+                "image": "docker.io/bayesimpact/react-base", 
+                "environmentVariables": [], 
+                "type": "LINUX_CONTAINER"
+            }, 
+            "source": {
+                "buildspec": "BuildSpecs/unittest-buildspec.yml", 
+                "gitCloneDepth": 1, 
+                "type": "CODECOMMIT", 
+                "location": "https://git-codecommit.ap-southeast-2.amazonaws.com/v1/repos/labyrinth-react", 
+                "insecureSsl": false
+            }, 
+            "badge": {
+                "badgeEnabled": false
+            }, 
+            "queuedTimeoutInMinutes": 480, 
+            "secondaryArtifacts": [], 
+            "secondarySources": [], 
+            "encryptionKey": "arn:aws:kms:ap-southeast-2:112251263943:alias/aws/s3", 
+            "arn": "arn:aws:codebuild:ap-southeast-2:112251263943:project/LabyrinthTestAndBuild"
+        }
+    ]
+}

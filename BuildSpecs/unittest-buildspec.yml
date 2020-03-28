@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo 'I>' Install started on `date`
+  build:
+    commands:
+      - echo 'I>' Build started on `date`
+      - "pwd && ls -la"
+      - cd react/
+      - npm install
+      - npm run build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+
+artifacts:
+  files:
+    - 'react/build/*'
