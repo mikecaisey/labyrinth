@@ -1,0 +1,129 @@
+{
+    "pipeline": {
+        "name": "labyrinth-ci-cd-pipeline",
+        "roleArn": "arn:aws:iam::112251263943:role/service-role/AWSCodePipelineServiceRole-ap-southeast-2-labyrinth-ci-cd-pipel",
+        "artifactStore": {
+            "type": "S3",
+            "location": "codepipeline-ap-southeast-2-597168824857"
+        },
+        "stages": [
+            {
+                "name": "Source",
+                "actions": [
+                    {
+                        "name": "Source",
+                        "actionTypeId": {
+                            "category": "Source",
+                            "owner": "AWS",
+                            "provider": "CodeCommit",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "BranchName": "pipeline",
+                            "PollForSourceChanges": "false",
+                            "RepositoryName": "labyrinth-react"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ],
+                        "inputArtifacts": [],
+                        "region": "ap-southeast-2",
+                        "namespace": "SourceVariables"
+                    }
+                ]
+            },
+            {
+                "name": "Build",
+                "actions": [
+                    {
+                        "name": "Build",
+                        "actionTypeId": {
+                            "category": "Build",
+                            "owner": "AWS",
+                            "provider": "CodeBuild",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "ProjectName": "LabyrinthTestAndBuild"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "BuildArtifact"
+                            }
+                        ],
+                        "inputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ],
+                        "region": "ap-southeast-2",
+                        "namespace": "BuildVariables"
+                    }
+                ]
+            },
+            {
+                "name": "Provision",
+                "actions": [
+                    {
+                        "name": "LabyrinthPrepareStage",
+                        "actionTypeId": {
+                            "category": "Build",
+                            "owner": "AWS",
+                            "provider": "CodeBuild",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "ProjectName": "LabyrinthPrepare"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "LabyrinthAppPrepare"
+                            }
+                        ],
+                        "inputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ],
+                        "region": "ap-southeast-2"
+                    },
+                    {
+                        "name": "ProvisionTestEnvironment",
+                        "actionTypeId": {
+                            "category": "Deploy",
+                            "owner": "AWS",
+                            "provider": "CloudFormation",
+                            "version": "1"
+                        },
+                        "runOrder": 3,
+                        "configuration": {
+                            "ActionMode": "CREATE_UPDATE",
+                            "Capabilities": "CAPABILITY_IAM",
+                            "RoleArn": "arn:aws:iam::112251263943:role/labyrinth-cloudformation-provision-role",
+                            "StackName": "Labyrinth-TESTStack",
+                            "TemplatePath": "LabyrinthAppPrepare::Templates/labyrinth-provision.yaml"
+                        },
+                        "outputArtifacts": [],
+                        "inputArtifacts": [
+                            {
+                                "name": "LabyrinthAppPrepare"
+                            }
+                        ],
+                        "region": "ap-southeast-2"
+                    }
+                ]
+            }
+        ],
+        "version": 8
+    },
+    "metadata": {
+        "pipelineArn": "arn:aws:codepipeline:ap-southeast-2:112251263943:labyrinth-ci-cd-pipeline",
+        "created": 1585545099.472,
+        "updated": 1585618812.309
+    }
+}

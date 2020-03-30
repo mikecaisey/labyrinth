@@ -1,0 +1,69 @@
+{
+    "projects": [
+        {
+            "name": "LabyrinthTestAndBuild",
+            "arn": "arn:aws:codebuild:ap-southeast-2:112251263943:project/LabyrinthTestAndBuild",
+            "source": {
+                "type": "CODECOMMIT",
+                "location": "https://git-codecommit.ap-southeast-2.amazonaws.com/v1/repos/labyrinth-react",
+                "gitCloneDepth": 1,
+                "gitSubmodulesConfig": {
+                    "fetchSubmodules": false
+                },
+                "buildspec": "BuildSpecs/unittest-buildspec.yml",
+                "insecureSsl": false
+            },
+            "secondarySources": [],
+            "sourceVersion": "refs/heads/pipeline",
+            "secondarySourceVersions": [],
+            "artifacts": {
+                "type": "S3",
+                "location": "labyrinth-react-build-artifacts",
+                "path": "",
+                "namespaceType": "BUILD_ID",
+                "name": "LabyrinthTestAndBuild",
+                "packaging": "NONE",
+                "overrideArtifactName": false,
+                "encryptionDisabled": true
+            },
+            "secondaryArtifacts": [],
+            "cache": {
+                "type": "NO_CACHE"
+            },
+            "environment": {
+                "type": "LINUX_CONTAINER",
+                "image": "docker.io/bayesimpact/react-base",
+                "computeType": "BUILD_GENERAL1_SMALL",
+                "environmentVariables": [],
+                "privilegedMode": true,
+                "imagePullCredentialsType": "SERVICE_ROLE"
+            },
+            "serviceRole": "arn:aws:iam::112251263943:role/service-role/codebuild-Labyrinth-service-role",
+            "timeoutInMinutes": 60,
+            "queuedTimeoutInMinutes": 480,
+            "encryptionKey": "arn:aws:kms:ap-southeast-2:112251263943:alias/aws/s3",
+            "tags": [
+                {
+                    "key": "Labyrinth",
+                    "value": "CodeBuild"
+                }
+            ],
+            "created": 1585369232.77,
+            "lastModified": 1585612179.845,
+            "badge": {
+                "badgeEnabled": false
+            },
+            "logsConfig": {
+                "cloudWatchLogs": {
+                    "status": "ENABLED"
+                },
+                "s3Logs": {
+                    "status": "DISABLED",
+                    "encryptionDisabled": false
+                }
+            },
+            "fileSystemLocations": []
+        }
+    ],
+    "projectsNotFound": []
+}

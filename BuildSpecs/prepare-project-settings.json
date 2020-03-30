@@ -1,0 +1,63 @@
+{
+    "projects": [
+        {
+            "name": "LabyrinthPrepare",
+            "arn": "arn:aws:codebuild:ap-southeast-2:112251263943:project/LabyrinthPrepare",
+            "source": {
+                "type": "CODECOMMIT",
+                "location": "https://git-codecommit.ap-southeast-2.amazonaws.com/v1/repos/labyrinth-react",
+                "gitCloneDepth": 1,
+                "gitSubmodulesConfig": {
+                    "fetchSubmodules": false
+                },
+                "buildspec": "BuildSpecs/prepare-buildspec.yml",
+                "insecureSsl": false
+            },
+            "secondarySources": [],
+            "sourceVersion": "refs/heads/pipeline",
+            "secondarySourceVersions": [],
+            "artifacts": {
+                "type": "S3",
+                "location": "labyrinth-react-build-artifacts",
+                "path": "",
+                "namespaceType": "NONE",
+                "name": "LabyrinthPrepare",
+                "packaging": "NONE",
+                "overrideArtifactName": false,
+                "encryptionDisabled": false
+            },
+            "secondaryArtifacts": [],
+            "cache": {
+                "type": "NO_CACHE"
+            },
+            "environment": {
+                "type": "LINUX_CONTAINER",
+                "image": "amazonlinux:2017.09",
+                "computeType": "BUILD_GENERAL1_SMALL",
+                "environmentVariables": [],
+                "privilegedMode": false,
+                "imagePullCredentialsType": "SERVICE_ROLE"
+            },
+            "serviceRole": "arn:aws:iam::112251263943:role/service-role/codebuild-LabyrinthPrepare-service-role",
+            "timeoutInMinutes": 60,
+            "queuedTimeoutInMinutes": 480,
+            "encryptionKey": "arn:aws:kms:ap-southeast-2:112251263943:alias/aws/s3",
+            "tags": [],
+            "created": 1585606802.915,
+            "lastModified": 1585615635.038,
+            "badge": {
+                "badgeEnabled": false
+            },
+            "logsConfig": {
+                "cloudWatchLogs": {
+                    "status": "ENABLED"
+                },
+                "s3Logs": {
+                    "status": "DISABLED",
+                    "encryptionDisabled": false
+                }
+            }
+        }
+    ],
+    "projectsNotFound": []
+}
