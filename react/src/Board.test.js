@@ -23,8 +23,8 @@ test('renders all 49 tiles', () => {
 })
 
 test('renders tiles in random order', () => {
-  render(<Board />)                           // Render board 1
-  const { getAllByRole } = render(<Board />)  // Render board 2
+  render(<Board />)                           // Render board once
+  const { getAllByRole } = render(<Board />)  // Render board twice
   const tileSets = getAllByRole(/cell/i)
   const tileSet1 = tileSets.slice(0, 49).map(x => x.textContent)
   const tileSet2 = tileSets.slice(49).map(x => x.textContent)
