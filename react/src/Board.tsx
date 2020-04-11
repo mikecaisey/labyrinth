@@ -5,11 +5,11 @@ type Row = JSX.Element
 type Square = JSX.Element
 
 type Tile = {
-  value: number
+  value: string
 }
 
 type SquareProps = {
-  squareValue: number
+  squareValue: string
 }
 
 type RowProps = {
@@ -33,15 +33,17 @@ class Board extends React.Component {
 
   createTileSet(): Tile[] {
     const tiles: Tile[] = new Array(49)
-      .fill(1)
+      .fill('')
       .map((_, i) => {
-        return { value: i }
+        return { value: `${i}` }
       })
       .sort(() => Math.random() - 0.5)
+
+    tiles[0].value = '╔' // move tile set accessors to a model file
     return tiles
   }
 
-  createBoard() {
+  createBoard() { // rename to populate board with tile set
     const rowCount: number = 7
     const colCount: number = 7
     const rows: Row[] = []
@@ -54,7 +56,7 @@ class Board extends React.Component {
       //Inner loop to create squares
       for (let j = 0; j < colCount; j++) {
         const squareIndex: number = (i * 7 + j + 1)
-        const squareValue: number = tiles[squareIndex - 1].value
+        const squareValue: string = tiles[squareIndex - 1].value
         squares.push(<Square
           key={squareIndex}
           squareValue={squareValue}
