@@ -1,12 +1,9 @@
 import React, { FunctionComponent } from 'react';
+import { looseTiles, staticTiles, Tile } from './Tile'
 import './Board.css'
 
 type Row = JSX.Element
 type Square = JSX.Element
-
-type Tile = {
-  value: string
-}
 
 type SquareProps = {
   tile: Tile
@@ -29,31 +26,40 @@ const Row: FunctionComponent<RowProps> = ({squares}) =>
     {squares}
   </div>
 
-const staticTiles: Tile[] = [
-  '╔','','╦','','╦','','╗',
-  '', '','', '','', '','',
-  '╠','','╠','','╦','','╣',
-  '', '','', '','', '','',
-  '╠','','╩','','╣','','╣',
-  '', '','', '','', '','',
-  '╚','','╩','','╩','','╝'
-].map(x => { return { value: x} })
-
 class Board extends React.Component {
 
   createTileSet(): Tile[] {
+    const staticSet: Tile[] = staticTiles()
+    const looseSet: Tile[] = looseTiles()
+
+    // initialize the tile set
     const tiles: Tile[] = new Array(49).fill('')
       .map((_, i) => { return { value: `${i}`} })
       .sort(() => Math.random() - 0.5)
 
+    // place the static tiles
+    tiles.forEach((_, i) => {
+      tiles[i] = (staticSet[i].value === '' ? tiles[i] : staticSet[i])
+    })
+
+    // place the loose tiles
+    const shuffledSet = looseSet.slice().sort(() => Math.random() - 0.5)
     tiles.forEach((x, i) => {
-      tiles[i] = (staticTiles[i].value === '' ? tiles[i] : staticTiles[i])
+      const isEmptySquare: boolean = !Number.isNaN(Number(x.value))
+      if (isEmptySquare) {
+        let tile: Tile | undefined = shuffledSet.pop()
+        if (typeof tile !== 'undefined') {
+          tiles[i] = tile
+        } else {
+          throw 'Tile error'
+        }
+      }
     })
 
     return tiles
   }
 
-  createBoard() { // rename to populate board with tile set
+  renderBoard() {
     const rowCount: number = 7
     const colCount: number = 7
     const rows: Row[] = []
@@ -88,7 +94,7 @@ class Board extends React.Component {
       <div className="game">
         <div className="game-board" role="grid">
           <div>
-            {this.createBoard()}
+            {this.renderBoard()}
           </div>
         </div>
         <div className="game-info">
