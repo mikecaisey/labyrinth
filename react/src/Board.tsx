@@ -9,17 +9,17 @@ type Tile = {
 }
 
 type SquareProps = {
-  squareValue: string
+  tile: Tile
 }
 
 type RowProps = {
   squares: JSX.Element[]
 }
 
-const Square: FunctionComponent<SquareProps> = ({squareValue}) =>
+const Square: FunctionComponent<SquareProps> = ({tile}) =>
   <div className="square"
     role="gridcell">
-    {squareValue}
+    {tile.value}
   </div>
 
 const Row: FunctionComponent<RowProps> = ({squares}) =>
@@ -29,17 +29,27 @@ const Row: FunctionComponent<RowProps> = ({squares}) =>
     {squares}
   </div>
 
+const staticTiles: Tile[] = [
+  '╔','','╦','','╦','','╗',
+  '', '','', '','', '','',
+  '╠','','╠','','╦','','╣',
+  '', '','', '','', '','',
+  '╠','','╩','','╣','','╣',
+  '', '','', '','', '','',
+  '╚','','╩','','╩','','╝'
+].map(x => { return { value: x} })
+
 class Board extends React.Component {
 
   createTileSet(): Tile[] {
-    const tiles: Tile[] = new Array(49)
-      .fill('')
-      .map((_, i) => {
-        return { value: `${i}` }
-      })
+    const tiles: Tile[] = new Array(49).fill('')
+      .map((_, i) => { return { value: `${i}`} })
       .sort(() => Math.random() - 0.5)
 
-    tiles[0].value = '╔' // move tile set accessors to a model file
+    tiles.forEach((x, i) => {
+      tiles[i] = (staticTiles[i].value === '' ? tiles[i] : staticTiles[i])
+    })
+
     return tiles
   }
 
@@ -56,14 +66,15 @@ class Board extends React.Component {
       //Inner loop to create squares
       for (let j = 0; j < colCount; j++) {
         const squareIndex: number = (i * 7 + j + 1)
-        const squareValue: string = tiles[squareIndex - 1].value
+        const squareValue: Tile = tiles[squareIndex - 1]
+
         squares.push(<Square
           key={squareIndex}
-          squareValue={squareValue}
+          tile={squareValue}
         />)
       }
 
-      //Create the parent and add the squares
+      //Create the row and add the squares
       rows.push(<Row
         squares={squares}
         key={i + 1}
