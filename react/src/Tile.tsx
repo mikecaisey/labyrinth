@@ -2,6 +2,10 @@ export type Tile = {
   value: string
 }
 
+export const newTile: (value: string) => Tile = (value: string) => {
+  return { value }
+}
+
 const ls: string[] = ['╚','╝','╗','╔']
 const ts: string[] = ['╦','╣','╠','╩']
 const is: string[] = ['║','═']
@@ -16,7 +20,7 @@ export const shuffledLooseTiles: () => Tile[] = () => {
   const t: string[] = new Array(6).fill('╩').map(x => shuffleRotate(ts))
   const l: string[] = new Array(15).fill('╚').map(x => shuffleRotate(ls))
   const i: string[] = new Array(13).fill('║').map(x => shuffleRotate(is))
-  let tiles: Tile[] = t.concat(l).concat(i).map(x => ({ value: x }))
+  let tiles: Tile[] = t.concat(l).concat(i).map(x => newTile(x))
   tiles.sort(() => Math.random() - 0.5)
   return tiles
 }
@@ -29,4 +33,4 @@ export const staticTiles: () => Tile[] = () => [
   '╠','','╩','','╣','','╣',
   '', '','', '','', '','',
   '╚','','╩','','╩','','╝'
-].map(x => { return { value: x} })
+].map(x => newTile(x))

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { shuffledLooseTiles, staticTiles, Tile } from './Tile'
+import { newTile, shuffledLooseTiles, staticTiles, Tile } from './Tile'
 import './Board.css'
 
 type Row = JSX.Element
@@ -34,7 +34,7 @@ class Board extends React.Component {
 
     // initialize the tile set
     const tiles: Tile[] = new Array(49).fill('')
-      .map((_, i) => { return { value: `${i}`} })
+      .map((_, i) => newTile(`${i}`))
       .sort(() => Math.random() - 0.5)
 
     // place the static tiles
