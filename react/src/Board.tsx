@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { looseTiles, staticTiles, Tile } from './Tile'
+import { shuffledLooseTiles, staticTiles, Tile } from './Tile'
 import './Board.css'
 
 type Row = JSX.Element
@@ -30,7 +30,7 @@ class Board extends React.Component {
 
   createTileSet(): Tile[] {
     const staticSet: Tile[] = staticTiles()
-    const looseSet: Tile[] = looseTiles()
+    const looseSet: Tile[] = shuffledLooseTiles()
 
     // initialize the tile set
     const tiles: Tile[] = new Array(49).fill('')
@@ -43,7 +43,7 @@ class Board extends React.Component {
     })
 
     // place the loose tiles
-    const shuffledSet = looseSet.slice().sort(() => Math.random() - 0.5)
+    const shuffledSet = looseSet.slice()
     tiles.forEach((x, i) => {
       const isEmptySquare: boolean = !Number.isNaN(Number(x.value))
       if (isEmptySquare) {
