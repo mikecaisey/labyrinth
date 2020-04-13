@@ -31,7 +31,9 @@ class Board extends React.Component {
     const rowCount: number = 7
     const colCount: number = 7
     const rows: Row[] = []
-    const tiles: Tile[] = createTileSet()
+    const allTiles: [Tile[], Tile] = createTileSet()
+    const tiles = allTiles[0]
+    const spare = allTiles[1]
 
     // Outer loop to create the rows
     for (let i: number = 0; i < rowCount; i++) {

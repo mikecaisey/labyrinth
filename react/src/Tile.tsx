@@ -35,7 +35,7 @@ export const staticTiles: () => Tile[] = () => [
   '╚','','╩','','╩','','╝'
 ].map(x => newTile(x))
 
-export const createTileSet: () => Tile[] = () => {
+export const createTileSet: () => [Tile[], Tile] = () => {
   const staticSet: Tile[] = staticTiles()
   const looseSet: Tile[] = shuffledLooseTiles()
 
@@ -63,5 +63,7 @@ export const createTileSet: () => Tile[] = () => {
     }
   })
 
-  return tiles
+  const spareTile: Tile | undefined = shuffledSet.pop()
+  if (typeof spareTile === 'undefined') { throw 'Spare tile error' }
+  return [tiles, spareTile]
 }
