@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { createTileSet, Tile } from './Tile'
+import { createTileSet, newTile, Tile } from './Tile'
 import './Board.css'
 
 type Row = JSX.Element
@@ -27,7 +27,7 @@ const Row: FunctionComponent<RowProps> = ({squares}) =>
   </div>
 
 class Board extends React.Component {
-  renderBoard() {
+  renderBoard(): JSX.Element[] {
     const rowCount: number = 7
     const colCount: number = 7
     const rows: Row[] = []
@@ -59,6 +59,13 @@ class Board extends React.Component {
     return rows
   }
 
+  renderSpare(): JSX.Element {
+    return <Square
+      key={50}
+      tile={newTile('X')}
+    />
+  }
+
   render() {
     return (
       <div className="game">
@@ -68,7 +75,7 @@ class Board extends React.Component {
           </div>
         </div>
         <div className="game-info">
-          <div></div>
+          <div>{this.renderSpare()}</div>
           <ol></ol>
         </div>
       </div>
