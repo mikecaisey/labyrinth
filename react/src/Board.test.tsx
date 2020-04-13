@@ -30,7 +30,7 @@ test('renders tiles in random order', () => {
   expect(tileSet1).not.toEqual(tileSet2)
 })
 
-test('Static tiles are in expected squares', () => {
+test('static tiles are in expected squares', () => {
   const { getAllByRole } = render(<Board />)
   const tilesSet = getAllByRole(/cell/i).map(x => x.textContent)
   const staticSet = staticTiles().map(x => x.value)
@@ -39,4 +39,10 @@ test('Static tiles are in expected squares', () => {
       expect(x).toEqual(tilesSet[i])
     }
   })
+})
+
+test('renders spare tile', () => {
+  const { getByLabelText } = render(<Board />)
+  const spare = getByLabelText(/Spare tile/i)
+  expect(spare).not.toBeFalsy()
 })

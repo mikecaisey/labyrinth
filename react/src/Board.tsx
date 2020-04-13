@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { createTileSet, newTile, Tile } from './Tile'
+import { createTileSet, Tile, TileSet } from './Tile'
 import './Board.css'
 
 type Row = JSX.Element
@@ -19,6 +19,13 @@ const Square: FunctionComponent<SquareProps> = ({tile}) =>
     {tile.value}
   </div>
 
+const Spare: FunctionComponent<SquareProps> = ({tile}) =>
+  <button className="spare" id="spare-tile">
+    <div className="square">
+      {tile.value}
+    </div>
+  </button>
+
 const Row: FunctionComponent<RowProps> = ({squares}) =>
   <div
     className="board-row"
@@ -27,13 +34,17 @@ const Row: FunctionComponent<RowProps> = ({squares}) =>
   </div>
 
 class Board extends React.Component {
+  constructor(props: any) {
+    super(props)
+    this.state = createTileSet()
+  }
+
   renderBoard(): JSX.Element[] {
     const rowCount: number = 7
     const colCount: number = 7
     const rows: Row[] = []
-    const allTiles: [Tile[], Tile] = createTileSet()
-    const tiles = allTiles[0]
-    const spare = allTiles[1]
+    const tileSet: TileSet = this.state as TileSet
+    const tiles: Tile[] = tileSet.board
 
     // Outer loop to create the rows
     for (let i: number = 0; i < rowCount; i++) {
@@ -60,9 +71,11 @@ class Board extends React.Component {
   }
 
   renderSpare(): JSX.Element {
-    return <Square
+    const tileSet = this.state as TileSet
+    const spare: Tile = tileSet.spare
+    return <Spare
       key={50}
-      tile={newTile('X')}
+      tile={spare}
     />
   }
 
@@ -75,8 +88,10 @@ class Board extends React.Component {
           </div>
         </div>
         <div className="game-info">
-          <div>{this.renderSpare()}</div>
-          <ol></ol>
+          <div aria-labelledby="spare-label">{this.renderSpare()}</div>
+          <span id="spare-label">
+            Spare tile
+          </span>
         </div>
       </div>
     )
