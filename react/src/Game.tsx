@@ -1,12 +1,19 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { Spare } from './Square'
-import { createTileSet, TileSet, Tile } from './Tile'
+import { createTileSet, rotateTile, TileSet } from './Tile'
 import Board from './Board'
 
 class Game extends React.Component<any, TileSet> {
   constructor(props: any) { // Remove ?
     super(props)
     this.state = createTileSet()
+  }
+
+  handleSpareClick() {
+    this.setState({
+      board: this.state.board,
+      spare: rotateTile(this.state.spare)
+    })
   }
 
   render() {
@@ -20,6 +27,7 @@ class Game extends React.Component<any, TileSet> {
             <Spare
               key={50}
               tile={this.state.spare}
+              rotateSpare={() => {this.handleSpareClick()}}
             />
           </div>
           <span id="spare-label">

@@ -5,9 +5,21 @@ export const newTile: (value: string) => Tile = (value: string) => {
   return { value }
 }
 
-const ls: string[] = ['╚','╝','╗','╔']
-const ts: string[] = ['╦','╣','╠','╩']
+const ls: string[] = ['╚','╔','╗','╝']
+const ts: string[] = ['╦','╣','╩','╠']
 const is: string[] = ['║','═']
+
+export const rotateTile = (before: Tile): Tile => {
+  // if (typeof before === null) throw new Error('Rotate spare error 1')
+  const fixtures: string[][] = [
+    ['╚', '╔'], ['╔', '╗'], ['╗', '╝'], ['╝', '╚'],
+    ['╦', '╣'], ['╣', '╩'], ['╩', '╠'], ['╠', '╦'],
+    ['║', '═'], ['═', '║'],
+  ]
+  const rotated = fixtures.find(x => x[0] === before.value)
+  if (typeof rotated === 'undefined') throw new Error('Rotated spare error')
+  return { value:rotated[1] }
+}
 
 const shuffleRotation = (set: string[]): string => {
   if (set.length === 0) { throw new Error('Shuffle rotate error') }
