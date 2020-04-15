@@ -1,5 +1,6 @@
-import React from 'react';
-import { createTileSet, TileSet } from './Tile'
+import React, { FunctionComponent } from 'react';
+import { Spare } from './Square'
+import { createTileSet, TileSet, Tile } from './Tile'
 import Board from './Board'
 
 class Game extends React.Component<any, TileSet> {
@@ -10,10 +11,22 @@ class Game extends React.Component<any, TileSet> {
 
   render() {
     return (
-      <Board
-        board={this.state.board}
-        spare={this.state.spare}
-      />
+      <div className="game">
+        <Board
+          board={this.state.board}
+        />
+        <div className="game-info">
+          <div aria-labelledby="spare-label">
+            <Spare
+              key={50}
+              tile={this.state.spare}
+            />
+          </div>
+          <span id="spare-label">
+            Spare tile
+          </span>
+        </div>
+      </div>
     )
   }
 }

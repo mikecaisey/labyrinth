@@ -1,19 +1,32 @@
 import React, { FunctionComponent } from 'react';
-import { Tile, TileSet } from './Tile'
+import { Tile } from './Tile'
+import { Square } from './Square'
 import './Board.css'
 
 type Row = JSX.Element
 type Square = JSX.Element
-type Spare = Tile
-type BoardProps = TileSet
 
-type SquareProps = {
-  tile: Tile
+type BoardProps = {
+  board: Tile[]
 }
 
 type RowProps = {
   squares: Square[]
 }
+
+const Board: FunctionComponent<BoardProps> = ({board}) =>
+    <div className="game-board" role="grid">
+      <div>
+        {layTilesOnBoard(board)}
+      </div>
+    </div>
+
+const Row: FunctionComponent<RowProps> = ({squares}) =>
+  <div
+    className="board-row"
+    role="row">
+    {squares}
+  </div>
 
 const layTilesOnBoard = (tiles: Tile[]) => {
   const rowCount: number = 7
@@ -43,48 +56,5 @@ const layTilesOnBoard = (tiles: Tile[]) => {
   }
   return rows
 }
-
-const laySpare = (spare: Tile) => {
-  return <Spare
-    key={50}
-    tile={spare}
-  />
-}
-
-const Board: FunctionComponent<BoardProps> = ({board, spare}) =>
-  <div className="game">
-    <div className="game-board" role="grid">
-      <div>
-        {layTilesOnBoard(board)}
-      </div>
-    </div>
-    <div className="game-info">
-      <div aria-labelledby="spare-label">{laySpare(spare)}</div>
-      <span id="spare-label">
-        Spare tile
-      </span>
-    </div>
-  </div>
-
-const Square: FunctionComponent<SquareProps> = ({tile}) =>
-  <div className="square"
-    role="gridcell">
-    {tile.value}
-  </div>
-
-const Spare: FunctionComponent<SquareProps> = ({tile}) =>
-  <button className="spare" id="spare-tile">
-    <div className="square">
-      {tile.value}
-    </div>
-  </button>
-
-const Row: FunctionComponent<RowProps> = ({squares}) =>
-  <div
-    className="board-row"
-    role="row">
-    {squares}
-  </div>
-
 // export default Board
 export default Board
