@@ -28,7 +28,11 @@ const Row: FunctionComponent<RowProps> = ({squares}) =>
     {squares}
   </div>
 
-const layTilesOnBoard = (tiles: Tile[]) => {
+const handleBoardClick = function() {
+  console.log('INFO: Playable square click')
+}
+
+const layTilesOnBoard = (tiles: Tile[]): JSX.Element[] => {
   const rowCount: number = 7
   const colCount: number = 7
   const rows: Row[] = []
@@ -45,6 +49,8 @@ const layTilesOnBoard = (tiles: Tile[]) => {
       squares.push(<Square
         key={squareIndex}
         tile={squareValue}
+        isPlayable={playableSquares[squareIndex -1]}
+        playSpareTile={handleBoardClick}
       />)
     }
 
@@ -56,5 +62,16 @@ const layTilesOnBoard = (tiles: Tile[]) => {
   }
   return rows
 }
+
+const playableSquares = [
+  false, true,  false, true,  false, true,  false,
+  true,  false, false, false, false, false, true,
+  false, false, false, false, false, false, false,
+  true,  false, false, false, false, false, true,
+  false, false, false, false, false, false, false,
+  true,  false, false, false, false, false, true,
+  false, true,  false, true,  false, true,  false
+]
+
 // export default Board
 export default Board

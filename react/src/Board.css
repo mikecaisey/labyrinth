@@ -8,6 +8,14 @@
   margin-bottom: 10px;
 }
 
+.spare {
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 34px;
+  padding: 0;
+  text-align: center;
+}
+
 .square {
   color: #777;
   background: #fff;
@@ -22,6 +30,11 @@
   padding: 0;
   text-align: center;
   width: 34px;
+  cursor: pointer;
+}
+
+.square-btn:hover {
+  background-color: yellow;
 }
 
 .square:focus {

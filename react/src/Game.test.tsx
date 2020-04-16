@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import Game from './Game';
-import { staticTiles, createTileSet ,TileSet } from './Tile'
+import { staticTiles } from './Tile'
 
 test('renders 7 rows', () => {
   const { getAllByRole } = render(<Game />)
@@ -32,11 +32,11 @@ test('renders tiles in random order', () => {
 
 test('static tiles are in expected squares', () => {
   const { getAllByRole } = render(<Game />)
-  const tilesSet = getAllByRole(/cell/i).map(x => x.textContent)
+  const tileSet = getAllByRole(/cell/i).map(x => x.textContent)
   const staticSet = staticTiles().map(x => x.value)
   staticSet.forEach((x, i) => {
     if (x !== '') {
-      expect(x).toEqual(tilesSet[i])
+      expect(x).toEqual(tileSet[i])
     }
   })
 })
@@ -45,4 +45,11 @@ test('renders spare tile', () => {
   const { getByLabelText } = render(<Game />)
   const spare = getByLabelText(/Spare tile/i)
   expect(spare).not.toBeFalsy()
+})
+
+test('board edge tiles are aria clickable', () => {
+  const { getAllByRole } = render(<Game />)
+  const tileSet = getAllByRole(/button/i)
+    .filter(x => x.className === 'squareButton')
+  expect(tileSet.length).toEqual(12)
 })
