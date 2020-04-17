@@ -1,10 +1,10 @@
 import React from 'react';
 import { Spare } from './Square'
-import { createTileSet, rotateTile, TileSet } from './Tile'
+import { createTileSet, rotateTile, moveTiles, TileSet } from './Tile'
 import Board from './Board'
 
 class Game extends React.Component<any, TileSet> {
-  constructor(props: any) { // Remove ?
+  constructor(props: any) {
     super(props)
     this.state = createTileSet()
   }
@@ -16,18 +16,23 @@ class Game extends React.Component<any, TileSet> {
     })
   }
 
+  handleBoardClick(squareIndex: number) {
+    this.setState(moveTiles(this.state, squareIndex))
+  }
+
   render() {
     return (
       <div className="game">
         <Board
           board={this.state.board}
+          playSpareTile={this.handleBoardClick.bind(this)}
         />
         <div className="game-info">
           <div aria-labelledby="spare-label">
             <Spare
               key={50}
               tile={this.state.spare}
-              rotateSpare={() => {this.handleSpareClick()}}
+              rotateSpare={this.handleSpareClick.bind(this)}
             />
           </div>
           <span id="spare-label">

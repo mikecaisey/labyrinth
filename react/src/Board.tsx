@@ -7,17 +7,18 @@ type Row = JSX.Element
 type Square = JSX.Element
 
 type BoardProps = {
-  board: Tile[]
+  board: Tile[],
+  playSpareTile: (i: number) => void
 }
 
 type RowProps = {
   squares: Square[]
 }
 
-const Board: FunctionComponent<BoardProps> = ({board}) =>
+const Board: FunctionComponent<BoardProps> = ({board, playSpareTile}) =>
     <div className="game-board" role="grid">
       <div>
-        {layTilesOnBoard(board)}
+        {layTilesOnBoard(board, playSpareTile)}
       </div>
     </div>
 
@@ -28,11 +29,7 @@ const Row: FunctionComponent<RowProps> = ({squares}) =>
     {squares}
   </div>
 
-const handleBoardClick = function() {
-  console.log('INFO: Playable square click')
-}
-
-const layTilesOnBoard = (tiles: Tile[]): JSX.Element[] => {
+const layTilesOnBoard = (tiles: Tile[], playSpareTile: (i: number) => void): JSX.Element[] => {
   const rowCount: number = 7
   const colCount: number = 7
   const rows: Row[] = []
@@ -43,14 +40,15 @@ const layTilesOnBoard = (tiles: Tile[]): JSX.Element[] => {
 
     //Inner loop to create squares
     for (let j: number = 0; j < colCount; j++) {
-      const squareIndex: number = (i * 7 + j + 1)
-      const squareValue: Tile = tiles[squareIndex - 1]
+      const squareIndex: number = (i * 7 + j)
+      const squareNumber: number = squareIndex + 1
+      const squareValue: Tile = tiles[squareIndex]
 
       squares.push(<Square
-        key={squareIndex}
+        key={squareNumber}
         tile={squareValue}
-        isPlayable={playableSquares[squareIndex -1]}
-        playSpareTile={handleBoardClick}
+        isPlayable={playableSquares[squareIndex]}
+        playSpareTile={() => playSpareTile(squareIndex)}
       />)
     }
 

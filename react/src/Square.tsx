@@ -6,7 +6,7 @@ type TileProps = {
 }
 
 type SquareProps = {
-  playSpareTile: () => void,
+  playSpareTile: () => void
   isPlayable: boolean
 }
 
@@ -20,7 +20,7 @@ export const Square: FunctionComponent<TileProps & SquareProps> = ({tile, isPlay
   tabIndex={0}>
   <div role={isPlayable ? 'button' : ''}
     className="squareButton"
-    onClick={isPlayable ? playSpareTile : () => {}}>
+    onClick={isPlayable ? playSpareTile : undefined}>
     {tile.value}
   </div>
 </div>

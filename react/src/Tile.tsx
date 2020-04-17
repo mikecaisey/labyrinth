@@ -78,3 +78,75 @@ export const createTileSet: () => TileSet = () => {
   if (typeof spare === 'undefined') { throw new Error('Spare tile error') }
   return { board: tiles, spare }
 }
+
+export const moveTiles = function(tileSet: TileSet, squareIndex: number): TileSet {
+  let newTileSet: TileSet = { board: [], spare: { value: 'x' } }
+  if ([1,3,5].indexOf(squareIndex) >= 0) newTileSet = moveTilesDown(tileSet, squareIndex)
+  if ([43,45,47].indexOf(squareIndex) >= 0) newTileSet = moveTilesUp(tileSet, squareIndex)
+  if ([13,27,41].indexOf(squareIndex) >= 0) newTileSet = moveTilesLeft(tileSet, squareIndex)
+  if ([7,21,35].indexOf(squareIndex) >= 0) newTileSet = moveTilesRight(tileSet, squareIndex)
+  return newTileSet
+}
+
+const moveTilesLeft = function(tileSet: TileSet, squareIndex: number): TileSet {
+  const oldSet = tileSet.board
+  const newSet = tileSet.board.slice()
+  const oldSpare = tileSet.spare
+  let newSpare = tileSet.spare
+
+  // left
+  const row = squareIndex - 7
+  for (let n=1; n<7; n++) newSet[n+row] = oldSet[n+row+1]
+  newSet[squareIndex] = oldSpare
+  newSpare = oldSet[squareIndex - 6]
+
+  return { board: newSet, spare: newSpare }
+}
+
+const moveTilesRight = function(tileSet: TileSet, squareIndex: number): TileSet {
+  const oldSet = tileSet.board
+  const newSet = tileSet.board.slice()
+  const oldSpare = tileSet.spare
+  let newSpare = tileSet.spare
+
+  // right
+  const row = squareIndex
+  for (let n=1; n<=6; n++) newSet[n+row] = oldSet[n+row-1]
+  newSet[row] = oldSpare
+  newSpare = oldSet[row+6]
+
+  return { board: newSet, spare: newSpare }
+}
+
+const moveTilesUp = function(tileSet: TileSet, squareIndex: number): TileSet {
+  const oldSet = tileSet.board
+  const newSet = tileSet.board.slice()
+  const oldSpare = tileSet.spare
+  let newSpare = tileSet.spare
+
+  // up
+  const column = squareIndex % 7
+  new Array(49).fill(0).forEach((_, n) => {
+    if (n%7 === column) newSet[n] = newSet[n+7] ?? oldSpare
+  })
+  newSpare = oldSet[column]
+
+  return { board: newSet, spare: newSpare }
+}
+
+const moveTilesDown = function(tileSet: TileSet, squareIndex: number): TileSet {
+  const oldSet = tileSet.board
+  const newSet = tileSet.board.slice()
+  const oldSpare = tileSet.spare
+  let newSpare = tileSet.spare
+
+  // down
+  const column = squareIndex
+  new Array(49).fill(0).forEach((_, n) => {
+    if (n%7 === column) newSet[n] = oldSet[n-7] ?? oldSpare
+  })
+  newSpare = oldSet[42+column]
+
+
+  return { board: newSet, spare: newSpare }
+}
