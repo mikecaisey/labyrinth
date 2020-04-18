@@ -48,6 +48,9 @@
 .game {
   display: flex;
   flex-direction: row;
+  position:fixed;
+  left:20px; 
+  top:20px;
 }
 
 .game-info {
