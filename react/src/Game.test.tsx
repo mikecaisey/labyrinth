@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import Game from './Game';
 import { staticTiles } from './Tile'
 
@@ -49,79 +49,26 @@ test('renders spare tile', () => {
 
 test('board edge tiles are aria clickable', () => {
   const { getAllByRole } = render(<Game />)
-  const tileSet = getAllByRole(/button/i)
+  const btnSet = getAllByRole(/button/i)
     .filter(x => x.className === 'squareButton')
-  expect(tileSet.length).toEqual(12)
+  expect(btnSet.length).toEqual(12)
 })
 
-const myArray = new Array(49).fill(0).map((_, i) => i)
-const mySpare = 49
-
-test('insert tile', () => {
-  // take array and clone
-  const newArray = myArray.slice()
-  let newSpare = 49
-
-  // shift row or columns
-  const r = 14
-  for (let i=1; i<=6; i++) newArray[i+r] = myArray[i+r-1]
-  newArray[r] = mySpare
-  newSpare = r+6
-
-  // return new array
-  ;((a, s) => {
-    let o = ''
-    for (let i=0; i<8; i++) {
-      o += a.slice(i*7,i*7+7).map(x => `${x}`.padEnd(2,' ')).toString() + "\n"
-    }
-    console.log(o,s)
-  })(newArray, newSpare)
-})
-
-const up = function(myArray: number[], mySpare: number) {
-  const newArray = myArray.slice()
-  let newSpare = 49
-
-  myArray.forEach(n => {
-    if (n%7 === 5) newArray[n] = myArray[n+7] ?? mySpare
-  })
-  newSpare = 5
-
-  return [newArray, newSpare]
+// render board to console helper
+const consoleRender = (a: (string|null)[], s: string) => {
+  let o = ''
+  for (let i=0; i<8; i++) {
+    o += a.slice(i*7,i*7+7).map(x => `${x}`.padEnd(2,' ')).toString() + "\n"
+  }
+  console.log(o,s)
 }
 
-const down = function(myArray: number[], mySpare: number) {
-  const newArray = myArray.slice()
-  let newSpare = 49
+// simple move tileSet
+const moveTiles = (tileSet: (string|null)[], spare: string) => {
+  const column3IdxSet = [ 5, 12, 19, 26, 33, 40, 47 ]
 
-  myArray.forEach(n => {
-    if (n%7 === 5) newArray[n] = myArray[n-7] ?? mySpare
-  })
-  newSpare = 47
-
-  return [newArray, newSpare]
-}
-
-const left = function(myArray: number[], mySpare: number) {
-  const newArray = myArray.slice()
-  let newSpare = 49
-
-  const r = 14
-  for (let i=0; i<6; i++) newArray[i+r] = myArray[i+r+1]
-  newArray[1*r+6] = mySpare
-  newSpare = r
-
-  return [newArray, newSpare]
-}
-
-const right = function(myArray: number[], mySpare: number) {
-  const newArray = myArray.slice()
-  let newSpare = 49
-
-  const r = 14
-  for (let i=1; i<=6; i++) newArray[i+r] = myArray[i+r-1]
-  newArray[r] = mySpare
-  newSpare = r+6
-
-  return [newArray, newSpare]
+  const column = [spare]
+  column3IdxSet.forEach(x => column.push(tileSet[x]))
+  const newSpare = column.pop() ?? 'X'
+  return [column, newSpare]
 }
