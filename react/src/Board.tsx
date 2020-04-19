@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Tile } from './Tile'
 import { Square } from './Square'
-import './Board.css'
 
 type Row = JSX.Element
 type Square = JSX.Element
