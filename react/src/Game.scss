@@ -1,3 +1,5 @@
+@import "shared-colors";
+
 .board-row:after {
   clear: both;
   content: "";
@@ -17,9 +19,9 @@
 }
 
 .square {
-  color: #777;
-  background: #fff;
-  border: 1px solid #999;
+  color: $color1;
+  background: $color3;
+  border: 1px solid $color2;
   float: left;
   font-size: 28px;
   font-weight: bold;
@@ -34,7 +36,7 @@
 }
 
 .square-btn:hover {
-  background-color: yellow;
+  background-color: $color4;
 }
 
 .square:focus {
@@ -42,7 +44,7 @@
 }
 
 .kbd-navigation .square:focus {
-  background: #ddd;
+  background: $color4  ;
 }
 
 .game {
@@ -55,9 +57,20 @@
 
 .game-board {
   min-width: 245px;
+  max-height: 245px;
+  border: 5px solid $color2;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .game-info {
   margin-left: 20px;
   text-align: left;
+  border: 5px solid $color2;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.game-info a {
+  color: $color5
 }
