@@ -14,9 +14,15 @@
   font-size: 28px;
   font-weight: bold;
   line-height: 34px;
-  padding: 0;
-  text-align: center;
-}
+  text-align: center; }
+
+.spare-info {
+  margin-top: 12.36px;
+  border: 5px solid $color2;
+  border-radius: 5px; }
+
+.spare-label {
+  margin-left: 12.36px; }
 
 .square {
   color: $color1;
@@ -53,6 +59,11 @@
   position:fixed;
   left:20px;
   top:20px;
+}
+
+.game-header {
+  border: 5px solid $color2;
+  border-radius: 5px;
 }
 
 .game-board {

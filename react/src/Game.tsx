@@ -25,21 +25,25 @@ class Game extends React.Component<any, TileSet> {
   render() {
     return (
       <div className="game">
-        <Board
-          board={this.state.board}
-          playSpareTile={this.handleBoardClick.bind(this)}
-        />
-        <div className="game-info">
-          <div aria-labelledby="spare-label">
+        <div className="game-header"></div>
+        <div>
+          <Board
+            board={this.state.board}
+            playSpareTile={this.handleBoardClick.bind(this)}
+          />
+          <div className="spare-info" aria-labelledby="spare-label">
             <Spare
               key={50}
               tile={this.state.spare}
               rotateSpare={this.handleSpareClick.bind(this)}
             />
+            <span id="spare-label" className="spare-label">
+              Spare tile
+            </span>
           </div>
-          <span id="spare-label">
-            Spare tile
-          </span>
+        </div>
+
+        <div className="game-info">
           <div>
             <p>Lorem ipsum <a href="#asdf">dolor sit amet</a>, consectetur adipiscing elit. Mauris purus mi, posuere in ex ut, commodo aliquet sem. Curabitur non metus in lorem pharetra imperdiet ut eu risus. Pellentesque gravida leo enim, sed ullamcorper enim porttitor ac. Donec ullamcorper purus a leo pretium, in euismod nibh tristique. Nunc aliquet augue nec nunc viverra, ac semper velit facilisis. Nulla aliquam quis lectus vel faucibus. Nulla facilisi. Pellentesque vel purus lacus. Vestibulum dignissim diam nec dolor consectetur, et molestie sem pharetra. Vestibulum at sodales ipsum. Morbi consectetur orci nibh, et aliquam orci accumsan at.</p>
             <p>Suspendisse potenti. Sed lectus lorem, bibendum a ligula a, varius rutrum purus. Ut nec tortor mi. Sed pretium semper quam ut pulvinar. Nam metus lacus, dictum at rhoncus quis, dapibus id quam. Sed interdum nisi id iaculis tempor. Nam magna leo, fringilla sed posuere ac, tincidunt a urna. Morbi ut auctor lorem. In hac habitasse platea dictumst. Mauris mollis nulla sed diam sollicitudin elementum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean massa dui, luctus efficitur fringilla quis, semper in nunc.</p>
