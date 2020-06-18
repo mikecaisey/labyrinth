@@ -18,7 +18,7 @@
 
 .spare-info {
   margin-top: 12.36px;
-  border: 5px solid $color2;
+  border: 2px solid $color2;
   border-radius: 5px; }
 
 .spare-label {
@@ -62,22 +62,24 @@
 }
 
 .game-header {
-  border: 5px solid $color2;
-  border-radius: 5px;
+  // border: 2px solid $color2;
+  // border-radius: 5px;
 }
 
 .game-board {
   min-width: 245px;
   max-height: 245px;
-  border: 5px solid $color2;
+  border: 2px solid $color2;
   border-radius: 5px;
   padding: 5px;
 }
 
 .game-info {
+  font-size: calc(10px + 1vmin);
+  font-weight: 100;
   margin-left: 20px;
   text-align: left;
-  border: 5px solid $color2;
+  border: 2px solid $color2;
   border-radius: 5px;
   padding: 5px;
 }
