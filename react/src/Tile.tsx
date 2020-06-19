@@ -1,9 +1,8 @@
-export type Tile = { value: string }
+export type Tile = { value: string, uid: number }
 export type TileSet = { board: Tile[], spare: Tile }
 
-export const newTile: (value: string) => Tile = (value: string) => {
-  return { value }
-}
+export const newTile: (value: string, uid: number) => Tile
+  = (value: string, uid: number) => ({ value, uid })
 
 const ls: string[] = ['╚','╔','╗','╝']
 const ts: string[] = ['╦','╣','╩','╠']
@@ -18,7 +17,7 @@ export const rotateTile = (before: Tile): Tile => {
   ]
   const rotated = fixtures.find(x => x[0] === before.value)
   if (typeof rotated === 'undefined') throw new Error('Rotated spare error')
-  return { value:rotated[1] }
+  return { value:rotated[1], uid: before.uid }
 }
 
 const shuffleRotation = (set: string[]): string => {
@@ -27,14 +26,15 @@ const shuffleRotation = (set: string[]): string => {
   return set[index]
 }
 
-const shuffledLooseTiles: () => Tile[] = () => {
-  const t: string[] = new Array(6).fill('').map(() => shuffleRotation(ts))
-  const l: string[] = new Array(15).fill('').map(() => shuffleRotation(ls))
-  const i: string[] = new Array(13).fill('').map(() => shuffleRotation(is))
-  let tiles: Tile[] = t.concat(l).concat(i).map(x => newTile(x))
-  tiles.sort(() => Math.random() - 0.5)
-  return tiles
-}
+const shuffledLooseTiles: () => Tile[]
+  = () => {
+    const t: string[] = new Array(6).fill('').map(() => shuffleRotation(ts))
+    const l: string[] = new Array(15).fill('').map(() => shuffleRotation(ls))
+    const i: string[] = new Array(13).fill('').map(() => shuffleRotation(is))
+    let tiles: Tile[] = t.concat(l).concat(i).map(x => newTile(x, -1))
+    tiles.sort(() => Math.random() - 0.5)
+    return tiles
+  }
 
 export const staticTiles: () => Tile[] = () => [
   '╔','','╦','','╦','','╗',
@@ -44,7 +44,7 @@ export const staticTiles: () => Tile[] = () => [
   '╠','','╩','','╣','','╣',
   '', '','', '','', '','',
   '╚','','╩','','╩','','╝'
-].map(x => newTile(x))
+].map(x => newTile(x, -1))
 
 export const createTileSet: () => TileSet = () => {
   const staticSet: Tile[] = staticTiles()
@@ -52,12 +52,13 @@ export const createTileSet: () => TileSet = () => {
 
   // initialize the tile set
   const tiles: Tile[] = new Array(49).fill('')
-    .map((_, i) => newTile(`${i}`))
+    .map((_, i) => newTile(`${i}`, -1))
     .sort(() => Math.random() - 0.5)
 
-  // place the static tiles
+  // place the static tiles and set uid
   tiles.forEach((_, i) => {
     tiles[i] = (staticSet[i].value === '' ? tiles[i] : staticSet[i])
+    tiles[i].uid = i
   })
 
   // place the loose tiles
@@ -80,7 +81,7 @@ export const createTileSet: () => TileSet = () => {
 }
 
 export const moveTiles = function(tileSet: TileSet, squareIndex: number): TileSet {
-  let newTileSet: TileSet = { board: [], spare: { value: 'x' } }
+  let newTileSet: TileSet = { board: [], spare: newTile('x', -1) }
   if ([1,3,5].indexOf(squareIndex) >= 0) newTileSet = moveTilesDown(tileSet, squareIndex)
   if ([43,45,47].indexOf(squareIndex) >= 0) newTileSet = moveTilesUp(tileSet, squareIndex)
   if ([13,27,41].indexOf(squareIndex) >= 0) newTileSet = moveTilesLeft(tileSet, squareIndex)
