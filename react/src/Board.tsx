@@ -6,18 +6,17 @@ type Row = JSX.Element
 type Square = JSX.Element
 
 type BoardProps = {
-  board: TileDto[],
-  playSpareTile: (i: number) => void
+  board: TileDto[]
 }
 
 type RowProps = {
   squares: Square[]
 }
 
-const Board: FunctionComponent<BoardProps> = ({board, playSpareTile}) =>
+const Board: FunctionComponent<BoardProps> = ({board}) =>
     <div className="game-board" role="grid">
       <div>
-        {layTilesOnBoard(board, playSpareTile)}
+        {layTilesOnBoard(board)}
       </div>
     </div>
 
@@ -28,7 +27,7 @@ const Row: FunctionComponent<RowProps> = ({squares}) =>
     {squares}
   </div>
 
-const layTilesOnBoard = (tiles: TileDto[], playSpareTile: (i: number) => void): JSX.Element[] => {
+const layTilesOnBoard = (tiles: TileDto[]): JSX.Element[] => {
   const rowCount: number = 7
   const colCount: number = 7
   const rows: Row[] = []
@@ -47,7 +46,6 @@ const layTilesOnBoard = (tiles: TileDto[], playSpareTile: (i: number) => void): 
         key={squareNumber}
         tile={squareValue}
         isPlayable={playableSquares[squareIndex]}
-        playSpareTile={() => playSpareTile(squareIndex)}
       />)
     }
 

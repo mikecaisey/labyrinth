@@ -1,25 +1,29 @@
 import React from 'react';
-import { Spare } from './Square'
-import { createTileSet, rotateTile, moveTiles, TileSet } from './Tile'
+import { connect } from 'react-redux'
+
 import Board from './Board'
+import { Spare } from './Spare'
+import { TileSet } from './Tile'
+import { playSpare } from './actions'
+import { RootState } from './reducers'
 import './Game.scss'
 
+// Game Component & redux connect
+const mapStateToProps = (state: RootState) => ({
+  board: state.board,
+  spare: state.spare
+})
 
-class Game extends React.Component<any, TileSet> {
-  constructor(props: any) {
+const mapDispatchToProps = { playSpare }
+
+type GameState = TileSet
+type GameProps = ReturnType<typeof mapStateToProps>
+  & typeof mapDispatchToProps
+
+// _Unconnected Component
+class _Game extends React.Component<GameProps, GameState> {
+  constructor(props: GameProps) {
     super(props)
-    this.state = createTileSet()
-  }
-
-  handleSpareClick() {
-    this.setState({
-      board: this.state.board,
-      spare: rotateTile(this.state.spare)
-    })
-  }
-
-  handleBoardClick(squareIndex: number) {
-    this.setState(moveTiles(this.state, squareIndex))
   }
 
   render() {
@@ -28,18 +32,13 @@ class Game extends React.Component<any, TileSet> {
         <div className="game-header"></div>
         <div>
           <Board
-            board={this.state.board}
-            playSpareTile={this.handleBoardClick.bind(this)}
+            board={this.props.board}
           />
           <div className="spare-info" aria-labelledby="spare-label">
             <Spare
               key={50}
-              tile={this.state.spare}
-              rotateSpare={this.handleSpareClick.bind(this)}
             />
-            <span id="spare-label" className="spare-label">
-              Spare tile
-            </span>
+            <span id="spare-label" className="spare-label">Spare tile</span>
           </div>
         </div>
 
@@ -56,5 +55,7 @@ class Game extends React.Component<any, TileSet> {
     )
   }
 }
+
+const Game = connect(mapStateToProps, mapDispatchToProps)(_Game)
 
 export default Game

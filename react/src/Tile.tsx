@@ -1,10 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import { TileProps, SquareProps } from './Square'
 
-export const Tile: FunctionComponent<TileProps & SquareProps> = ({tile, isPlayable, playSpareTile}) =>
+export const Tile: FunctionComponent<TileProps & SquareProps> = ({tile, isPlayable}) =>
 <div role={isPlayable ? 'button' : ''}
-  className="squareButton"
-  onClick={isPlayable ? playSpareTile : undefined}>
+  className="squareButton">
   {tile.value}
 </div>
 
