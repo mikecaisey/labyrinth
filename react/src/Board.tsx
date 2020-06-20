@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react';
-import { Tile } from './Tile'
+import { TileDto } from './Tile'
 import { Square } from './Square'
 
 type Row = JSX.Element
 type Square = JSX.Element
 
 type BoardProps = {
-  board: Tile[],
+  board: TileDto[],
   playSpareTile: (i: number) => void
 }
 
@@ -28,7 +28,7 @@ const Row: FunctionComponent<RowProps> = ({squares}) =>
     {squares}
   </div>
 
-const layTilesOnBoard = (tiles: Tile[], playSpareTile: (i: number) => void): JSX.Element[] => {
+const layTilesOnBoard = (tiles: TileDto[], playSpareTile: (i: number) => void): JSX.Element[] => {
   const rowCount: number = 7
   const colCount: number = 7
   const rows: Row[] = []
@@ -41,7 +41,7 @@ const layTilesOnBoard = (tiles: Tile[], playSpareTile: (i: number) => void): JSX
     for (let j: number = 0; j < colCount; j++) {
       const squareIndex: number = (i * 7 + j)
       const squareNumber: number = squareIndex + 1
-      const squareValue: Tile = tiles[squareIndex]
+      const squareValue: TileDto = tiles[squareIndex]
 
       squares.push(<Square
         key={squareNumber}

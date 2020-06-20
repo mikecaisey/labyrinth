@@ -1,14 +1,24 @@
-export type Tile = { value: string, uid: number }
-export type TileSet = { board: Tile[], spare: Tile }
+import React, { FunctionComponent } from 'react';
+import { TileProps, SquareProps } from './Square'
 
-export const newTile: (value: string, uid: number) => Tile
+export const Tile: FunctionComponent<TileProps & SquareProps> = ({tile, isPlayable, playSpareTile}) =>
+<div role={isPlayable ? 'button' : ''}
+  className="squareButton"
+  onClick={isPlayable ? playSpareTile : undefined}>
+  {tile.value}
+</div>
+
+export type TileDto = { value: string, uid: number }
+export type TileSet = { board: TileDto[], spare: TileDto }
+
+export const newTile: (value: string, uid: number) => TileDto
   = (value: string, uid: number) => ({ value, uid })
 
 const ls: string[] = ['╚','╔','╗','╝']
 const ts: string[] = ['╦','╣','╩','╠']
 const is: string[] = ['║','═']
 
-export const rotateTile = (before: Tile): Tile => {
+export const rotateTile = (before: TileDto): TileDto => {
   // if (typeof before === null) throw new Error('Rotate spare error 1')
   const fixtures: string[][] = [
     ['╚', '╔'], ['╔', '╗'], ['╗', '╝'], ['╝', '╚'],
@@ -26,17 +36,17 @@ const shuffleRotation = (set: string[]): string => {
   return set[index]
 }
 
-const shuffledLooseTiles: () => Tile[]
+const shuffledLooseTiles: () => TileDto[]
   = () => {
     const t: string[] = new Array(6).fill('').map(() => shuffleRotation(ts))
     const l: string[] = new Array(15).fill('').map(() => shuffleRotation(ls))
     const i: string[] = new Array(13).fill('').map(() => shuffleRotation(is))
-    let tiles: Tile[] = t.concat(l).concat(i).map(x => newTile(x, -1))
+    let tiles: TileDto[] = t.concat(l).concat(i).map(x => newTile(x, -1))
     tiles.sort(() => Math.random() - 0.5)
     return tiles
   }
 
-export const staticTiles: () => Tile[] = () => [
+export const staticTiles: () => TileDto[] = () => [
   '╔','','╦','','╦','','╗',
   '', '','', '','', '','',
   '╠','','╠','','╦','','╣',
@@ -47,36 +57,40 @@ export const staticTiles: () => Tile[] = () => [
 ].map(x => newTile(x, -1))
 
 export const createTileSet: () => TileSet = () => {
-  const staticSet: Tile[] = staticTiles()
-  const looseSet: Tile[] = shuffledLooseTiles()
+  const staticSet: TileDto[] = staticTiles()
+  const looseSet: TileDto[] = shuffledLooseTiles()
 
-  // initialize the tile set
-  const tiles: Tile[] = new Array(49).fill('')
-    .map((_, i) => newTile(`${i}`, -1))
+  // suffle indexes
+  const tiles: TileDto[] = new Array(49).fill('')
+    .map((_, i) => newTile(`${i}`, i))
     .sort(() => Math.random() - 0.5)
 
-  // place the static tiles and set uid
-  tiles.forEach((_, i) => {
-    tiles[i] = (staticSet[i].value === '' ? tiles[i] : staticSet[i])
-    tiles[i].uid = i
-  })
+  // replace static indexes with corresponding static tiles
+  for (let i=0; i<tiles.length; i++) {
+    if (staticSet[i].value !== '') {
+      tiles[i] = staticSet[i]
+      tiles[i].uid = i
+    }
+  }
 
-  // place the loose tiles
+  // replace remaining indexes with loose tiles
   const shuffledSet = looseSet.slice()
   tiles.forEach((x, i) => {
     const isEmptySquare: boolean = !Number.isNaN(Number(x.value))
     if (isEmptySquare) {
-      let tile: Tile | undefined = shuffledSet.pop()
+      let tile: TileDto | undefined = shuffledSet.pop()
       if (typeof tile !== 'undefined') {
         tiles[i] = tile
+        tiles[i].uid = i
       } else {
-        throw new Error('Tile error')
+        throw new Error('TileDto error')
       }
     }
   })
 
-  const spare: Tile | undefined = shuffledSet.pop()
+  const spare: TileDto | undefined = shuffledSet.pop()
   if (typeof spare === 'undefined') { throw new Error('Spare tile error') }
+  spare.uid = 49
   return { board: tiles, spare }
 }
 

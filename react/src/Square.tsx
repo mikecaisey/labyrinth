@@ -1,11 +1,11 @@
 import React, { FunctionComponent } from 'react';
-import { Tile } from './Tile'
+import { TileDto, Tile } from './Tile'
 
-type TileProps = {
-  tile: Tile
+export type TileProps = {
+  tile: TileDto
 }
 
-type SquareProps = {
+export type SquareProps = {
   playSpareTile: () => void
   isPlayable: boolean
 }
@@ -18,11 +18,10 @@ export const Square: FunctionComponent<TileProps & SquareProps> = ({tile, isPlay
 <div className={isPlayable ? 'square square-btn' : 'square'}
   role="gridcell"
   tabIndex={0}>
-  <div role={isPlayable ? 'button' : ''}
-    className="squareButton"
-    onClick={isPlayable ? playSpareTile : undefined}>
-    {tile.value}
-  </div>
+  <Tile tile={tile}
+    isPlayable={isPlayable}
+    playSpareTile={playSpareTile}
+    key={tile.uid}/>
 </div>
 
 export const Spare: FunctionComponent<TileProps & SpareProps> = ({tile, rotateSpare}) =>
