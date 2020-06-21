@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import { TileDto } from './Tile'
-import { Square } from './Square'
+import { TileDto, Tile } from './Tile'
+// import { Square } from './Square'
 
 type Row = JSX.Element
 type Square = JSX.Element
@@ -11,6 +11,14 @@ type BoardProps = {
 
 type RowProps = {
   squares: Square[]
+}
+
+export type TileProps = {
+  tile: TileDto
+}
+
+export type SquareProps = {
+  isPlayable: boolean
 }
 
 const Board: FunctionComponent<BoardProps> = ({board}) =>
@@ -26,6 +34,15 @@ const Row: FunctionComponent<RowProps> = ({squares}) =>
     role="row">
     {squares}
   </div>
+
+const Square: FunctionComponent<TileProps & SquareProps> = ({tile, isPlayable}) =>
+<div className={isPlayable ? 'square square-btn' : 'square'}
+  role="gridcell"
+  tabIndex={0}>
+  <Tile tile={tile}
+    isPlayable={isPlayable}
+    key={tile.uid}/>
+</div>
 
 const layTilesOnBoard = (tiles: TileDto[]): JSX.Element[] => {
   const rowCount: number = 7

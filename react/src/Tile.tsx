@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { TileProps, SquareProps } from './Square'
+import { TileProps, SquareProps } from './Board'
 
 export const Tile: FunctionComponent<TileProps & SquareProps> = ({tile, isPlayable}) =>
 <div role={isPlayable ? 'button' : ''}
