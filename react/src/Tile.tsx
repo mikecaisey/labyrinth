@@ -40,9 +40,8 @@ const shuffledLooseTiles: () => TileDto[]
     const t: string[] = new Array(6).fill('').map(() => shuffleRotation(ts))
     const l: string[] = new Array(15).fill('').map(() => shuffleRotation(ls))
     const i: string[] = new Array(13).fill('').map(() => shuffleRotation(is))
-    let tiles: TileDto[] = t.concat(l).concat(i).map(x => newTile(x, -1))
-    tiles.sort(() => Math.random() - 0.5)
-    return tiles
+    let tiles: TileDto[] = [...i, ...t, ...l].map((x, i) => newTile(x, i))
+    return tiles.slice().sort(() => Math.random() - 0.5)
   }
 
 export const staticTiles: () => TileDto[] = () => [
@@ -53,13 +52,13 @@ export const staticTiles: () => TileDto[] = () => [
   '╠','','╩','','╣','','╣',
   '', '','', '','', '','',
   '╚','','╩','','╩','','╝'
-].map(x => newTile(x, -1))
+].map((x, i) => newTile(x, i))
 
 export const createTileSet: () => TileSet = () => {
   const staticSet: TileDto[] = staticTiles()
   const looseSet: TileDto[] = shuffledLooseTiles()
 
-  // suffle indexes
+  // create tiles
   const tiles: TileDto[] = new Array(49).fill('')
     .map((_, i) => newTile(`${i}`, i))
     .sort(() => Math.random() - 0.5)
@@ -68,7 +67,6 @@ export const createTileSet: () => TileSet = () => {
   for (let i=0; i<tiles.length; i++) {
     if (staticSet[i].value !== '') {
       tiles[i] = staticSet[i]
-      tiles[i].uid = i
     }
   }
 
@@ -80,7 +78,6 @@ export const createTileSet: () => TileSet = () => {
       let tile: TileDto | undefined = shuffledSet.pop()
       if (typeof tile !== 'undefined') {
         tiles[i] = tile
-        tiles[i].uid = i
       } else {
         throw new Error('TileDto error')
       }
@@ -89,7 +86,6 @@ export const createTileSet: () => TileSet = () => {
 
   const spare: TileDto | undefined = shuffledSet.pop()
   if (typeof spare === 'undefined') { throw new Error('Spare tile error') }
-  spare.uid = 49
   return { board: tiles, spare }
 }
 

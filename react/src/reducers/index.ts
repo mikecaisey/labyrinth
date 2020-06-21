@@ -1,6 +1,5 @@
-import { createTileSet, TileSet } from '../Tile'
+import { createTileSet, rotateTile, TileSet } from '../Tile'
 import { rotateSpare, playSpare, PlayerActions } from '../actions'
-import { rotateTile } from  '../Tile'
 
 type GameAction = ReturnType<typeof rotateSpare | typeof playSpare>
 type GameState = TileSet
