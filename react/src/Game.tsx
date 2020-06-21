@@ -3,24 +3,17 @@ import { connect } from 'react-redux'
 
 import Board from './Board'
 import { Spare } from './Spare'
-import { TileSet } from './Tile'
-import { playSpare } from './actions'
 import { RootState } from './reducers'
 import './Game.scss'
 
 // Game Component & redux connect
 const mapStateToProps = (state: RootState) => ({
-  board: state.board,
-  spare: state.spare
+  board: state.board
 })
 
-const mapDispatchToProps = { playSpare }
-
-type GameState = TileSet
 type GameProps = ReturnType<typeof mapStateToProps>
-  & typeof mapDispatchToProps
 
-const __Game: React.FunctionComponent<GameProps> = ({ board, spare, playSpare }) =>
+const Game: React.FunctionComponent<GameProps> = ({ board }) =>
 <div className="game">
   <div className="game-header"></div>
   <div>
@@ -42,5 +35,5 @@ const __Game: React.FunctionComponent<GameProps> = ({ board, spare, playSpare })
   </div>
 </div>
 
-const Game = connect(mapStateToProps, mapDispatchToProps)(__Game)
-export default Game
+const _Game = connect(mapStateToProps)(Game)
+export default _Game

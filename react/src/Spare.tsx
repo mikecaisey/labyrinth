@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux'
 import { Dispatch, AnyAction } from 'redux';
+import { PlayerActions } from './actions'
 import { RootState } from './reducers'
 import { TileDto } from './Tile'
 
@@ -10,7 +11,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
   rotateSpare: (spare: TileDto) => {
-    dispatch({ type: 'ROTATE_SPARE', value: spare })
+    dispatch({ type: PlayerActions.ROTATE_SPARE, value: spare })
   }
 })
 

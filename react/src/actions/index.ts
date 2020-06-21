@@ -5,9 +5,9 @@ export const rotateSpare = (tile: TileDto) => ({
   tile
 })
 
-export const playSpare = (tile: TileDto) => ({
+export const playSpare = (squareUid: number) => ({
   type: 'PLAY_SPARE',
-  tile
+  value: squareUid
 })
 
 export const PlayerActions = {

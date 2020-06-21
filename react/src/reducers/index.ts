@@ -1,18 +1,25 @@
-import { createTileSet, rotateTile, TileSet } from '../Tile'
+import { createTileSet, moveTiles, rotateTile, TileSet } from '../Tile'
 import { rotateSpare, playSpare, PlayerActions } from '../actions'
 
-type GameAction = ReturnType<typeof rotateSpare | typeof playSpare>
-type GameState = TileSet
+type RotateAction =  ReturnType<typeof rotateSpare>
+type PlaySpareAction = ReturnType<typeof playSpare>
+type GameAction = RotateAction | PlaySpareAction
 
-const initialState: GameState = createTileSet()
+const initialState: TileSet = createTileSet()
 
 export const gameReducer = (
-  state: GameState = initialState,
+  state: TileSet = initialState,
   action: GameAction
-): GameState => {
+): TileSet => {
+  
   switch (action.type) {
     case PlayerActions.ROTATE_SPARE:
       return { board:state.board, spare:rotateTile(state.spare) }
+
+    case PlayerActions.PLAY_SPARE:
+      const squareUid = (action as PlaySpareAction).value
+      return moveTiles(state, squareUid)
+
     default:
       return state;
   }

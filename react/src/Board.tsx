@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from 'react';
-import { TileDto, Tile } from './Tile'
-// import { Square } from './Square'
+import { TileDto, Tile, TileProps } from './Tile'
+import { Dispatch, AnyAction } from 'redux'
+import { connect } from 'react-redux'
+import { PlayerActions } from './actions'
 
 type Row = JSX.Element
 type Square = JSX.Element
@@ -9,24 +11,16 @@ type BoardProps = {
   board: TileDto[]
 }
 
+const Board: FunctionComponent<BoardProps> = ({board}) =>
+<div className="game-board" role="grid">
+  <div>
+    {layTilesOnBoard(board)}
+  </div>
+</div>
+
 type RowProps = {
   squares: Square[]
 }
-
-export type TileProps = {
-  tile: TileDto
-}
-
-export type SquareProps = {
-  isPlayable: boolean
-}
-
-const Board: FunctionComponent<BoardProps> = ({board}) =>
-    <div className="game-board" role="grid">
-      <div>
-        {layTilesOnBoard(board)}
-      </div>
-    </div>
 
 const Row: FunctionComponent<RowProps> = ({squares}) =>
   <div
@@ -35,14 +29,29 @@ const Row: FunctionComponent<RowProps> = ({squares}) =>
     {squares}
   </div>
 
-const Square: FunctionComponent<TileProps & SquareProps> = ({tile, isPlayable}) =>
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
+  playSpare: (key: number) => {
+    dispatch({ type: PlayerActions.PLAY_SPARE, value: key })
+  }
+})
+
+export type SquareProps = {
+  isPlayable: boolean,
+  uid: number
+} & TileProps
+  & ReturnType<typeof mapDispatchToProps>
+
+const _Square: FunctionComponent<SquareProps> = ({tile, isPlayable, playSpare, uid}) =>
 <div className={isPlayable ? 'square square-btn' : 'square'}
   role="gridcell"
-  tabIndex={0}>
+  tabIndex={0}
+  onClick={() => playSpare(uid)}>
   <Tile tile={tile}
     isPlayable={isPlayable}
     key={tile.uid}/>
 </div>
+
+const Square = connect(null, mapDispatchToProps)(_Square)
 
 const layTilesOnBoard = (tiles: TileDto[]): JSX.Element[] => {
   const rowCount: number = 7
@@ -55,13 +64,14 @@ const layTilesOnBoard = (tiles: TileDto[]): JSX.Element[] => {
 
     //Inner loop to create squares
     for (let j: number = 0; j < colCount; j++) {
-      const squareIndex: number = (i * 7 + j)
-      const tile: TileDto = tiles[squareIndex]
+      const squareUid: number = (i * 7 + j)
+      const tile: TileDto = tiles[squareUid]
 
       squares.push(<Square
-        key={squareIndex}
+        key={squareUid}
+        uid={squareUid}
         tile={tile}
-        isPlayable={playableSquares[squareIndex]}
+        isPlayable={playableSquares[squareUid]}
       />)
     }
 
@@ -84,5 +94,4 @@ const playableSquares = [
   false, true,  false, true,  false, true,  false
 ]
 
-// export default Board
 export default Board

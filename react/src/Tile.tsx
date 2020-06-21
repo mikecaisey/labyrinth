@@ -1,7 +1,11 @@
 import React, { FunctionComponent } from 'react';
-import { TileProps, SquareProps } from './Board'
 
-export const Tile: FunctionComponent<TileProps & SquareProps> = ({tile, isPlayable}) =>
+export type TileProps = {
+  tile: TileDto,
+  isPlayable: boolean
+}
+
+export const Tile: FunctionComponent<TileProps> = ({tile, isPlayable}) =>
 <div role={isPlayable ? 'button' : ''}
   className="squareButton">
   {tile.value}
@@ -89,38 +93,42 @@ export const createTileSet: () => TileSet = () => {
   return { board: tiles, spare }
 }
 
-export const moveTiles = function(tileSet: TileSet, squareIndex: number): TileSet {
+export const moveTiles = function(tileSet: TileSet, squareUid: number): TileSet {
   let newTileSet: TileSet = { board: [], spare: newTile('x', -1) }
-  if ([1,3,5].indexOf(squareIndex) >= 0) newTileSet = moveTilesDown(tileSet, squareIndex)
-  if ([43,45,47].indexOf(squareIndex) >= 0) newTileSet = moveTilesUp(tileSet, squareIndex)
-  if ([13,27,41].indexOf(squareIndex) >= 0) newTileSet = moveTilesLeft(tileSet, squareIndex)
-  if ([7,21,35].indexOf(squareIndex) >= 0) newTileSet = moveTilesRight(tileSet, squareIndex)
+  if ([1,3,5].indexOf(squareUid) >= 0) newTileSet = moveTilesDown(tileSet, squareUid)
+  else if ([43,45,47].indexOf(squareUid) >= 0) newTileSet = moveTilesUp(tileSet, squareUid)
+  else if ([13,27,41].indexOf(squareUid) >= 0) newTileSet = moveTilesLeft(tileSet, squareUid)
+  else if ([7,21,35].indexOf(squareUid) >= 0) newTileSet = moveTilesRight(tileSet, squareUid)
+  else {
+    newTileSet.board = tileSet.board.slice()
+    newTileSet.spare = tileSet.spare
+  }
   return newTileSet
 }
 
-const moveTilesLeft = function(tileSet: TileSet, squareIndex: number): TileSet {
+const moveTilesLeft = function(tileSet: TileSet, squareUid: number): TileSet {
   const oldSet = tileSet.board
   const newSet = tileSet.board.slice()
   const oldSpare = tileSet.spare
   let newSpare = tileSet.spare
 
   // left
-  const row = squareIndex - 7
+  const row = squareUid - 7
   for (let n=1; n<7; n++) newSet[n+row] = oldSet[n+row+1]
-  newSet[squareIndex] = oldSpare
-  newSpare = oldSet[squareIndex - 6]
+  newSet[squareUid] = oldSpare
+  newSpare = oldSet[squareUid - 6]
 
   return { board: newSet, spare: newSpare }
 }
 
-const moveTilesRight = function(tileSet: TileSet, squareIndex: number): TileSet {
+const moveTilesRight = function(tileSet: TileSet, squareUid: number): TileSet {
   const oldSet = tileSet.board
   const newSet = tileSet.board.slice()
   const oldSpare = tileSet.spare
   let newSpare = tileSet.spare
 
   // right
-  const row = squareIndex
+  const row = squareUid
   for (let n=1; n<=6; n++) newSet[n+row] = oldSet[n+row-1]
   newSet[row] = oldSpare
   newSpare = oldSet[row+6]
@@ -128,14 +136,14 @@ const moveTilesRight = function(tileSet: TileSet, squareIndex: number): TileSet 
   return { board: newSet, spare: newSpare }
 }
 
-const moveTilesUp = function(tileSet: TileSet, squareIndex: number): TileSet {
+const moveTilesUp = function(tileSet: TileSet, squareUid: number): TileSet {
   const oldSet = tileSet.board
   const newSet = tileSet.board.slice()
   const oldSpare = tileSet.spare
   let newSpare = tileSet.spare
 
   // up
-  const column = squareIndex % 7
+  const column = squareUid % 7
   new Array(49).fill(0).forEach((_, n) => {
     if (n%7 === column) newSet[n] = newSet[n+7] ?? oldSpare
   })
@@ -144,14 +152,14 @@ const moveTilesUp = function(tileSet: TileSet, squareIndex: number): TileSet {
   return { board: newSet, spare: newSpare }
 }
 
-const moveTilesDown = function(tileSet: TileSet, squareIndex: number): TileSet {
+const moveTilesDown = function(tileSet: TileSet, squareUid: number): TileSet {
   const oldSet = tileSet.board
   const newSet = tileSet.board.slice()
   const oldSpare = tileSet.spare
   let newSpare = tileSet.spare
 
   // down
-  const column = squareIndex
+  const column = squareUid
   new Array(49).fill(0).forEach((_, n) => {
     if (n%7 === column) newSet[n] = oldSet[n-7] ?? oldSpare
   })
