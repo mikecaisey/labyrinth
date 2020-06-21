@@ -56,11 +56,10 @@ const layTilesOnBoard = (tiles: TileDto[]): JSX.Element[] => {
     //Inner loop to create squares
     for (let j: number = 0; j < colCount; j++) {
       const squareIndex: number = (i * 7 + j)
-      const squareNumber: number = squareIndex + 1
       const squareValue: TileDto = tiles[squareIndex]
 
       squares.push(<Square
-        key={squareNumber}
+        key={squareIndex}
         tile={squareValue}
         isPlayable={playableSquares[squareIndex]}
       />)
